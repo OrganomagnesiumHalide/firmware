@@ -25,7 +25,7 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: clippy
-          args: --manifest-path rust_lib/Cargo.toml 
+          args: --manifest-path rust_lib/Cargo.toml -- -D warnings
   test:
     runs-on: ${{ matrix.os }}
     steps:

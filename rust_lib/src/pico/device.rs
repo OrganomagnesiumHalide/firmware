@@ -71,9 +71,7 @@ impl Pico {
             )),
         }
     }
-    pub fn get_pins(
-        &mut self,
-    ) -> Option<Pins> {
+    pub fn get_pins(&mut self) -> Option<Pins> {
         self.pins.take()
     }
 
