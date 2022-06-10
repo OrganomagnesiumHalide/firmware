@@ -1,35 +1,37 @@
 use core::time::Duration;
 
 use crate::pico::pins::*;
+
+type Pins = (
+    Pin0,
+    Pin1,
+    Pin2,
+    Pin3,
+    Pin4,
+    Pin5,
+    Pin6,
+    Pin7,
+    Pin8,
+    Pin9,
+    Pin10,
+    Pin11,
+    Pin12,
+    Pin13,
+    Pin14,
+    Pin15,
+    Pin16,
+    Pin17,
+    Pin18,
+    Pin19,
+    Pin20,
+    Pin21,
+    Pin22,
+    Pin23,
+    Pin24,
+    Pin25,
+);
 pub struct Pico {
-    pins: Option<(
-        Pin0,
-        Pin1,
-        Pin2,
-        Pin3,
-        Pin4,
-        Pin5,
-        Pin6,
-        Pin7,
-        Pin8,
-        Pin9,
-        Pin10,
-        Pin11,
-        Pin12,
-        Pin13,
-        Pin14,
-        Pin15,
-        Pin16,
-        Pin17,
-        Pin18,
-        Pin19,
-        Pin20,
-        Pin21,
-        Pin22,
-        Pin23,
-        Pin24,
-        Pin25,
-    )>,
+    pins: Option<Pins>,
 }
 unsafe impl Send for Pico {}
 
@@ -71,34 +73,7 @@ impl Pico {
     }
     pub fn get_pins(
         &mut self,
-    ) -> Option<(
-        Pin0,
-        Pin1,
-        Pin2,
-        Pin3,
-        Pin4,
-        Pin5,
-        Pin6,
-        Pin7,
-        Pin8,
-        Pin9,
-        Pin10,
-        Pin11,
-        Pin12,
-        Pin13,
-        Pin14,
-        Pin15,
-        Pin16,
-        Pin17,
-        Pin18,
-        Pin19,
-        Pin20,
-        Pin21,
-        Pin22,
-        Pin23,
-        Pin24,
-        Pin25,
-    )> {
+    ) -> Option<Pins> {
         self.pins.take()
     }
 
