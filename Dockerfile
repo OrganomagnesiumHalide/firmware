@@ -18,6 +18,8 @@ RUN cmake -Scorrosion -Bbuild -DCMAKE_BUILD_TYPE=Release
 RUN cmake --build build --config Release
 RUN cmake --install build --config Release
 
+RUN rustup component add rustfmt --toolchain stable
 RUN rustup target add thumbv6m-none-eabi
 COPY build.sh build.sh
+
 CMD ./build.sh
