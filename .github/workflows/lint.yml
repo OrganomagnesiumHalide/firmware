@@ -27,7 +27,7 @@ jobs:
           command: clippy
           args: --manifest-path rust_lib/Cargo.toml -- -D warnings
   test:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - uses: actions-rs/cargo@v1
