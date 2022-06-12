@@ -1,11 +1,10 @@
-#![no_std]
-
+#![cfg_attr(not(test), no_std)]
 use core::time::Duration;
 
 use crate::pico::perifs::InternalLED;
 use pico::device::Pico;
 
-mod pico;
+pub mod pico;
 
 pub fn main() {
     let mut pico = unsafe { Pico::new() };
@@ -24,10 +23,4 @@ pub fn blink(pico: &mut Pico, led: &mut InternalLED) {
     pico.sleep(Duration::from_secs(1));
     led.turn_off();
     pico.sleep(Duration::from_secs(1));
-}
-
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() {}
 }
