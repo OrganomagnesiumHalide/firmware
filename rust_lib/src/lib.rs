@@ -6,6 +6,9 @@ use pico::device::Pico;
 
 pub mod pico;
 
+/// # Panics
+/// - This should avoid panicking as much as possible.
+/// - It panics if we try to get pins mulitple times, as that would allow reading and writing from them in different places causing errors.
 pub fn main() {
     let mut pico = unsafe { Pico::new() };
 

@@ -1,6 +1,9 @@
 use core::time::Duration;
 
-use crate::pico::pins::*;
+use super::pins::{
+    Pin0, Pin1, Pin10, Pin11, Pin12, Pin13, Pin14, Pin15, Pin16, Pin17, Pin18, Pin19, Pin2, Pin20,
+    Pin21, Pin22, Pin23, Pin24, Pin25, Pin3, Pin4, Pin5, Pin6, Pin7, Pin8, Pin9,
+};
 
 type Pins = (
     Pin0,
@@ -36,9 +39,10 @@ pub struct Pico {
 unsafe impl Send for Pico {}
 
 impl Pico {
-    // This initializes the device. You can get pins from it, but only once.
-    // Safety: if you call this twice, you risk undefined behavior.
-
+    /// This initializes the device. You can get pins from it, but only once.
+    /// # Safety
+    /// - If you call this twice, you risk undefined behavior.
+    #[must_use]
     pub unsafe fn new() -> Self {
         Pico {
             pins: Option::Some((
@@ -75,13 +79,10 @@ impl Pico {
         self.pins.take()
     }
 
+    #[allow(clippy::unused_self)]
     pub fn sleep(&mut self, ms: Duration) {
         unsafe {
-            let amnt_ms = if ms.as_millis() > u32::MAX.into() {
-                u32::MAX
-            } else {
-                ms.as_millis() as u32
-            };
+            let amnt_ms = ms.as_millis().try_into().unwrap_or(u32::MAX);
             rust_bridge::c_functions::c_device_sleep(amnt_ms);
         }
     }

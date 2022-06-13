@@ -22,6 +22,7 @@ impl InternalLED {
         self.is_on = false;
     }
 
+    #[must_use]
     pub fn is_on(&self) -> bool {
         self.is_on
     }
