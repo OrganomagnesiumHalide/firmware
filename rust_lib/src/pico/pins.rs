@@ -70,12 +70,15 @@ pub struct Pin21 {
 pub struct Pin22 {
     pub(super) _private: (),
 }
-pub struct Pin23 {
-    pub(super) _private: (),
-}
-pub struct Pin24 {
-    pub(super) _private: (),
-}
 pub struct Pin25 {
+    pub(super) _private: (),
+}
+pub struct Pin26 {
+    pub(super) _private: (),
+}
+pub struct Pin27 {
+    pub(super) _private: (),
+}
+pub struct Pin28 {
     pub(super) _private: (),
 }

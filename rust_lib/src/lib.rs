@@ -14,8 +14,36 @@ pub fn main() {
 
     // This is only called once, so it shouldn't panic
 
-    let pins = pico.get_pins().unwrap();
-    let mut led: InternalLED = pins.25.into();
+    let (
+        _pin0,
+        _pin1,
+        _pin2,
+        _pin3,
+        _pin4,
+        _pin5,
+        _pin6,
+        _pin7,
+        _pin8,
+        _pin9,
+        _pin10,
+        _pin11,
+        _pin12,
+        _pin13,
+        _pin14,
+        _pin15,
+        _pin16,
+        _pin17,
+        _pin18,
+        _pin19,
+        _pin20,
+        _pin21,
+        _pin22,
+        pin25,
+        _pin26,
+        _pin27,
+        _pin28,
+    ) = pico.get_pins().unwrap();
+    let mut led: InternalLED = pin25.into();
     loop {
         blink(&mut pico, &mut led);
     }

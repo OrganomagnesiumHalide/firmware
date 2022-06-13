@@ -2,7 +2,7 @@ use core::time::Duration;
 
 use super::pins::{
     Pin0, Pin1, Pin10, Pin11, Pin12, Pin13, Pin14, Pin15, Pin16, Pin17, Pin18, Pin19, Pin2, Pin20,
-    Pin21, Pin22, Pin23, Pin24, Pin25, Pin3, Pin4, Pin5, Pin6, Pin7, Pin8, Pin9,
+    Pin21, Pin22, Pin25, Pin26, Pin27, Pin28, Pin3, Pin4, Pin5, Pin6, Pin7, Pin8, Pin9,
 };
 
 type Pins = (
@@ -29,9 +29,10 @@ type Pins = (
     Pin20,
     Pin21,
     Pin22,
-    Pin23,
-    Pin24,
     Pin25,
+    Pin26,
+    Pin27,
+    Pin28,
 );
 pub struct Pico {
     pins: Option<Pins>,
@@ -69,9 +70,10 @@ impl Pico {
                 Pin20 { _private: () },
                 Pin21 { _private: () },
                 Pin22 { _private: () },
-                Pin23 { _private: () },
-                Pin24 { _private: () },
                 Pin25 { _private: () },
+                Pin26 { _private: () },
+                Pin27 { _private: () },
+                Pin28 { _private: () },
             )),
         }
     }
