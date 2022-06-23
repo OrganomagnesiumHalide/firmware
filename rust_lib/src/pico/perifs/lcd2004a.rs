@@ -3,6 +3,7 @@ use crate::pico::pins::Pin;
 use core::{ffi::c_void, mem};
 use rust_bridge::c_functions;
 
+/// This struct represents an LCD2004 (which simply means that it's 20 blocks wide by 04 lines)
 pub struct LCD2004a {
     ptr: *mut c_void,
 }
@@ -32,26 +33,41 @@ impl LCD2004a {
             _ => Err(LCDError::ErrCodeTooLarge),
         }
     }
-    pub fn display<'a, S: Into<&'a str>>(&mut self, string: S, line: u8) {
+
+    /// This function displays the string.
+    ///
+    /// It takes an iterator as an argument. This allows the string to be displayed to be lazily generated.
+    pub fn display<S: Iterator<Item = u8>>(&mut self, string: S) {
         unsafe { c_functions::c_lcd_clear(self.ptr) };
-        let s: &'a str = string.into();
-        for (pos, c) in s.as_bytes().iter().enumerate() {
+        let mut line = 0;
+        let mut pos = 0;
+        for c in string {
             unsafe {
                 #[allow(clippy::cast_possible_truncation)]
                 #[allow(clippy::cast_possible_wrap)]
-                c_functions::c_lcd_putch(
-                    self.ptr,
-                    line,
-                    if pos <= 128 { pos as i32 } else { 129 },
-                    *c,
-                );
+                if c == b'\n' {
+                    line += 1;
+                    pos = 0;
+                } else {
+                    c_functions::c_lcd_putch(
+                        self.ptr,
+                        line,
+                        if pos <= 128 { pos as i32 } else { 129 },
+                        c,
+                    );
+                    pos += 1;
+                }
             };
         }
     }
 }
 
+/// This represents an error returned from the lcd c library
 pub enum LCDError {
+    /// This variant is returned when the LCD could not be initialized (such as if the library has an incorrect I2C address).
     InitError,
+    /// This is an assertion error.
     ErrCodeTooLarge,
+    /// This variant is returned when there is no LCD plugged into the supplied I2C bus.
     WrongI2C,
 }

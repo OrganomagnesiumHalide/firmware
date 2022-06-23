@@ -77,5 +77,6 @@ void c_lcd_clear(void* lcd) {
   lcd_clear((struct lcd_device*)lcd);
 }
 void c_lcd_putch(void* lcd, uint8_t line, int pos, unsigned char ch) {
+  lcd_set_cursor((struct lcd_device*)lcd,line,pos);
   lcd_char((struct lcd_device*)lcd, ch);
 }

@@ -1,5 +1,12 @@
+//! `rust_lib` is where the main business logic of the project is stored.
+//!
+//! Like in console applications, the main loop is in the main function. The [`pico`] module contains
+//! libraries to interact with the pico and its peripherals.
+
 #![allow(clippy::similar_names)]
 #![cfg_attr(not(test), no_std)]
+#![warn(missing_docs)]
+
 use core::time::Duration;
 
 use pico::{
@@ -7,11 +14,13 @@ use pico::{
     perifs::{i2c::I2C, internal_led::InternalLED, lcd2004a::LCD2004a},
 };
 
+/// This module contains the libraries required to interact with the pico in a safe way.
 pub mod pico;
 
+/// This function is where the main program loop is located.
 /// # Panics
 /// - This should avoid panicking as much as possible.
-/// - It panics if we try to get pins mulitple times, as that would allow reading and writing from them in different places causing errors.
+/// - It panics if we try to get pins multiple times, as that would allow reading and writing from them in different places causing errors.
 pub fn main() {
     let mut pico = unsafe { Pico::new() };
 
@@ -62,12 +71,15 @@ pub fn main() {
             pico::perifs::lcd2004a::LCDError::WrongI2C => panic!("WrongI2C"),
         },
     };
-    lcd_screen.display("This is a test", 0);
+    lcd_screen.display("This is a test\nline 2".as_bytes().iter().copied());
+
+    // To show that it's doing something
     loop {
         blink(&mut pico, &mut led);
     }
 }
 
+/// This function turns the internal LED on and off every two seconds
 pub fn blink(pico: &mut Pico, led: &mut InternalLED) {
     led.turn_on();
     pico.sleep(Duration::from_secs(1));
@@ -75,6 +87,9 @@ pub fn blink(pico: &mut Pico, led: &mut InternalLED) {
     pico.sleep(Duration::from_secs(1));
 }
 
+/// This function runs whenever the program panics.
+/// # TODO
+/// I should blink an LED to a known pattern and try writing to the LCD if possible
 pub fn panic() {
     #[allow(clippy::empty_loop)]
     loop {}

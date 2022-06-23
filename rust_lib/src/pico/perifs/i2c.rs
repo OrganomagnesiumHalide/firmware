@@ -5,6 +5,13 @@ use crate::pico::pins::{
     Pin20, Pin21, Pin26, Pin27, Pin3, Pin4, Pin5, Pin6, Pin7, Pin8, Pin9,
 };
 use paste::paste;
+
+/// This struct represents an I2C bus. It can be created from pins and then can be used to create other peripherals that are attached to the bus.
+///
+/// It can be made by calling a `from_pins_#` function, where the first number is that of the sda pin.
+/// The other pins must also be passed in so they won't be accidentally used somewhere else.
+///
+/// Since there are two I2C busses in the pico, it's possible to create only two I2C objects before running out of pins.
 pub struct I2C<P1, P2> {
     pub(super) sda: P1,
     pub(super) scl: P2,
@@ -14,8 +21,8 @@ macro_rules! make_I2C {
     ($num:literal, $sda:ident, $scl:ident, ($other_pin1:ident, $other_pin2:ident, $other_pin3:ident, $other_pin4:ident, $other_pin5:ident, $other_pin6:ident, $other_pin7:ident, $other_pin8:ident, $other_pin9:ident, $other_pin10:ident)) => {
         impl I2C<$sda, $scl> {
             paste! {
-                #[must_use]
 
+                #[must_use]
                 pub fn [<from_pins_ $num>](
                     sda: $sda,
                     scl: $scl,

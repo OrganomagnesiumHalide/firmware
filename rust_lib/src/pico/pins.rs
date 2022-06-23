@@ -1,7 +1,8 @@
+use core::ffi::c_void;
 macro_rules! make_pin {
     ($name:ident, $num:literal) => {
         pub struct $name {
-            _secret: (),
+            _secret: Option<*mut c_void>, // This is to ensure that it won't be Send or Sync
         }
         impl Pin for $name {
             fn get_pin(&self) -> u8 {
@@ -10,7 +11,7 @@ macro_rules! make_pin {
         }
         impl $name {
             pub(super) fn new() -> Self {
-                return Self { _secret: () };
+                return Self { _secret: None };
             }
         }
     };
