@@ -1,81 +1,50 @@
-pub struct Pin0 {
-    pub(super) _private: (),
+use core::ffi::c_void;
+macro_rules! make_pin {
+    ($name:ident, $num:literal) => {
+        pub struct $name {
+            _secret: Option<*mut c_void>, // This is to ensure that it won't be Send or Sync
+        }
+        impl Pin for $name {
+            fn get_pin(&self) -> u8 {
+                return $num;
+            }
+        }
+        impl $name {
+            pub(super) fn new() -> Self {
+                return Self { _secret: None };
+            }
+        }
+    };
 }
 
-pub struct Pin1 {
-    pub(super) _private: (),
-}
-pub struct Pin2 {
-    pub(super) _private: (),
-}
-pub struct Pin3 {
-    pub(super) _private: (),
-}
-pub struct Pin4 {
-    pub(super) _private: (),
+pub trait Pin {
+    fn get_pin(&self) -> u8;
 }
 
-pub struct Pin5 {
-    pub(super) _private: (),
-}
-pub struct Pin6 {
-    pub(super) _private: (),
-}
-pub struct Pin7 {
-    pub(super) _private: (),
-}
-pub struct Pin8 {
-    pub(super) _private: (),
-}
-
-pub struct Pin9 {
-    pub(super) _private: (),
-}
-pub struct Pin10 {
-    pub(super) _private: (),
-}
-pub struct Pin11 {
-    pub(super) _private: (),
-}
-pub struct Pin12 {
-    pub(super) _private: (),
-}
-pub struct Pin13 {
-    pub(super) _private: (),
-}
-pub struct Pin14 {
-    pub(super) _private: (),
-}
-pub struct Pin15 {
-    pub(super) _private: (),
-}
-pub struct Pin16 {
-    pub(super) _private: (),
-}
-pub struct Pin17 {
-    pub(super) _private: (),
-}
-pub struct Pin18 {
-    pub(super) _private: (),
-}
-pub struct Pin19 {
-    pub(super) _private: (),
-}
-pub struct Pin20 {
-    pub(super) _private: (),
-}
-pub struct Pin21 {
-    pub(super) _private: (),
-}
-pub struct Pin22 {
-    pub(super) _private: (),
-}
-pub struct Pin23 {
-    pub(super) _private: (),
-}
-pub struct Pin24 {
-    pub(super) _private: (),
-}
-pub struct Pin25 {
-    pub(super) _private: (),
-}
+make_pin!(Pin0, 0);
+make_pin!(Pin1, 1);
+make_pin!(Pin2, 2);
+make_pin!(Pin3, 3);
+make_pin!(Pin4, 4);
+make_pin!(Pin5, 5);
+make_pin!(Pin6, 6);
+make_pin!(Pin7, 7);
+make_pin!(Pin8, 8);
+make_pin!(Pin9, 9);
+make_pin!(Pin10, 10);
+make_pin!(Pin11, 11);
+make_pin!(Pin12, 12);
+make_pin!(Pin13, 13);
+make_pin!(Pin14, 14);
+make_pin!(Pin15, 15);
+make_pin!(Pin16, 16);
+make_pin!(Pin17, 17);
+make_pin!(Pin18, 18);
+make_pin!(Pin19, 19);
+make_pin!(Pin20, 20);
+make_pin!(Pin21, 21);
+make_pin!(Pin22, 22);
+make_pin!(Pin25, 25);
+make_pin!(Pin26, 26);
+make_pin!(Pin27, 27);
+make_pin!(Pin28, 28);

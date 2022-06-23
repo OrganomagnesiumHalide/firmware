@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 
 rust_bridge = { path = "../rust_bridge" }
+paste = "1.0.7"

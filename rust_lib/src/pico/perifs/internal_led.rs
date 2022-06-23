@@ -1,4 +1,4 @@
-use super::pins::Pin25;
+use crate::pico::pins::Pin25;
 
 pub struct InternalLED {
     pin: u8,
@@ -22,6 +22,7 @@ impl InternalLED {
         self.is_on = false;
     }
 
+    #[must_use]
     pub fn is_on(&self) -> bool {
         self.is_on
     }
