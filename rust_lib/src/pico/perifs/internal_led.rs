@@ -1,4 +1,4 @@
-use super::pins::Pin25;
+use crate::pico::pins::Pin25;
 
 pub struct InternalLED {
     pin: u8,

@@ -7,5 +7,7 @@ pub extern "C" fn run_rust_main() {
 
 #[panic_handler]
 fn my_panic(_info: &core::panic::PanicInfo) -> ! {
-    loop {}
+    loop {
+        rust_lib::panic();
+    }
 }

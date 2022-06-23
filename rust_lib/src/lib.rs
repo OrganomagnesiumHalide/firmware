@@ -1,8 +1,11 @@
+#![allow(clippy::similar_names)]
 #![cfg_attr(not(test), no_std)]
 use core::time::Duration;
 
-use crate::pico::perifs::InternalLED;
-use pico::device::Pico;
+use pico::{
+    device::Pico,
+    perifs::{i2c::I2C, internal_led::InternalLED, lcd2004a::LCD2004a},
+};
 
 pub mod pico;
 
@@ -15,28 +18,28 @@ pub fn main() {
     // This is only called once, so it shouldn't panic
 
     let (
-        _pin0,
-        _pin1,
+        pin0,
+        pin1,
         _pin2,
         _pin3,
-        _pin4,
-        _pin5,
+        pin4,
+        pin5,
         _pin6,
         _pin7,
-        _pin8,
-        _pin9,
+        pin8,
+        pin9,
         _pin10,
         _pin11,
-        _pin12,
-        _pin13,
+        pin12,
+        pin13,
         _pin14,
         _pin15,
-        _pin16,
-        _pin17,
+        pin16,
+        pin17,
         _pin18,
         _pin19,
-        _pin20,
-        _pin21,
+        pin20,
+        pin21,
         _pin22,
         pin25,
         _pin26,
@@ -44,6 +47,22 @@ pub fn main() {
         _pin28,
     ) = pico.get_pins().unwrap();
     let mut led: InternalLED = pin25.into();
+    let i2c = I2C::from_pins_4(
+        pin4,
+        pin5,
+        (
+            pin0, pin1, pin8, pin9, pin12, pin13, pin16, pin17, pin20, pin21,
+        ),
+    );
+    let mut lcd_screen = match LCD2004a::from_i2c(i2c) {
+        Ok(lcd_screen) => lcd_screen,
+        Err(e) => match e {
+            pico::perifs::lcd2004a::LCDError::InitError => panic!("InitError"),
+            pico::perifs::lcd2004a::LCDError::ErrCodeTooLarge => panic!("ErrCodeTooLarge"),
+            pico::perifs::lcd2004a::LCDError::WrongI2C => panic!("WrongI2C"),
+        },
+    };
+    lcd_screen.display("This is a test", 0);
     loop {
         blink(&mut pico, &mut led);
     }
@@ -54,4 +73,9 @@ pub fn blink(pico: &mut Pico, led: &mut InternalLED) {
     pico.sleep(Duration::from_secs(1));
     led.turn_off();
     pico.sleep(Duration::from_secs(1));
+}
+
+pub fn panic() {
+    #[allow(clippy::empty_loop)]
+    loop {}
 }
