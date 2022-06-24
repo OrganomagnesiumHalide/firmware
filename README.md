@@ -14,6 +14,33 @@ This program will output "this is a test" and "line2" to the LCD, and then flash
 
 ## Building
 
+**Important note:** This code assumes that the I2C address of your LCD is 0x27. If you don't see anything on your display (and tweeking the potentiometer or putting a jumper on the two LED labeled pins doesn't help), you may need to adjust it. 
+
+To find the address, install MicroPython and run the following code in Thonny or in another MicroPython environment:
+
+```python
+import machine
+sdaPIN=machine.Pin(4)
+sclPIN=machine.Pin(5)
+i2c=machine.I2C(0,sda=sdaPIN, scl=sclPIN, freq=400000)
+devices = i2c.scan()
+if len(devices) == 0:
+  print("No i2c device !")
+else:
+  print('i2c devices found:',len(devices))
+for device in devices:
+  print("Hexa address: ",hex(device))
+```
+([source](https://peppe8o.com/using-i2c-lcd-display-with-raspberry-pi-pico-and-micropython/))
+
+It should output
+
+```
+Hexa address:  0x27
+```
+
+Replace the value in [lcd2004a.rs](https://github.com/OrganomagnesiumHalide/firmware/blob/main/rust_lib/src/pico/perifs/lcd2004a.rs#L22) with the correct address (don't forget the 0x since it's the hexadecimal of its real address).
+
 ### Docker
 
 If you have podman:
