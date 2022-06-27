@@ -21,7 +21,8 @@ macro_rules! make_I2C {
     ($num:literal, $sda:ident, $scl:ident, ($other_pin1:ident, $other_pin2:ident, $other_pin3:ident, $other_pin4:ident, $other_pin5:ident, $other_pin6:ident, $other_pin7:ident, $other_pin8:ident, $other_pin9:ident, $other_pin10:ident)) => {
         impl I2C<$sda, $scl> {
             paste! {
-
+                /// This function allows creating an I2C device from given pins.
+                /// It consumes the other pins that are on the same I2C channel so they won't be mistakenly used somewhere else.
                 #[must_use]
                 pub fn [<from_pins_ $num>](
                     sda: $sda,
@@ -136,12 +137,3 @@ make_I2C!(
     Pin27,
     (Pin2, Pin3, Pin6, Pin7, Pin10, Pin11, Pin14, Pin15, Pin18, Pin19)
 );
-
-impl<P1: Pin, P2: Pin> I2C<P1, P2> {
-    pub fn send(&mut self, data: &[u8]) {
-        self.sda.get_pin();
-        _ = data;
-        _ = self.sda.get_pin();
-        _ = self.scl.get_pin();
-    }
-}
