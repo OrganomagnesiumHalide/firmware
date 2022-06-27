@@ -10,11 +10,12 @@ The code running on the Raspberry Pi Pico.
 
 ![Image of breadboard](schematic.svg)
 
-This program will output "this is a test" and "line2" to the LCD, and then flash the onboard LED.
+The program will output "this is a test" and "line2" to the LCD, then wait for input using an Elegoo remote.
+When the program receives usable data, it outputs it in hex form to the LCD (the first two numbers are the address and the second two numbers are the command).
 
 ## Building
 
-**Important note:** This code assumes that the I2C address of your LCD is 0x27. If you don't see anything on your display (and tweeking the potentiometer or putting a jumper on the two LED labeled pins doesn't help), you may need to adjust it. 
+**Important note:** This code assumes that the I2C address of your LCD is 0x27. If you don't see anything on your display (and tweeking the potentiometer or putting a jumper on the two LED labeled pins doesn't help), you may need to adjust it.
 
 To find the address, install MicroPython and run the following code in Thonny or in another MicroPython environment:
 
@@ -31,11 +32,12 @@ else:
 for device in devices:
   print("Hexa address: ",hex(device))
 ```
+
 ([source](https://peppe8o.com/using-i2c-lcd-display-with-raspberry-pi-pico-and-micropython/))
 
 It should output
 
-```
+```lang-none
 Hexa address:  0x27
 ```
 
