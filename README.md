@@ -6,9 +6,9 @@ The code running on the Raspberry Pi Pico.
 
 ## Schematics
 
-![Image of breadboard](breadboard.svg)
+![Image of breadboard](breadboard.png)
 
-![Image of breadboard](schematic.svg)
+![Image of breadboard](schematic.png)
 
 The program will output "this is a test" and "line2" to the LCD, then wait for input using an Elegoo remote.
 When the program receives usable data, it outputs it in hex form to the LCD (the first two numbers are the address and the second two numbers are the command).
