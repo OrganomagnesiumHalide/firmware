@@ -31,7 +31,7 @@ jobs:
           draft: false
           prerelease: false
           release_name: ${{ env.release }}
-          tag_name: ${{ env.tag }}
+          tag_name: release-${{ env.tag }}
         env:
           GITHUB_TOKEN: ${{ secrets.token }}
       - name: Upload Release Asset
