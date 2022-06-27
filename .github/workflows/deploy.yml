@@ -21,7 +21,7 @@ jobs:
           export release_version=${GITHUB_REF#refs/tags/}
           echo "version is: ${{ env.release_version }}"
           echo "release=$release_version" >> $GITHUB_ENV
-          echo "tag=release_version" >> $GITHUB_ENV
+          echo "tag=$release_version" >> $GITHUB_ENV
           ls /tmp/out/firmware.uf2
           mv /tmp/out/firmware.uf2 .
       - name: create_release
