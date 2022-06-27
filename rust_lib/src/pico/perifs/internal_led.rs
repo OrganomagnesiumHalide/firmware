@@ -1,11 +1,13 @@
 use crate::pico::pins::Pin25;
 
+/// This struct represents the internal LED
 pub struct InternalLED {
     pin: u8,
     is_on: bool,
 }
 
 impl InternalLED {
+    /// This function turns on the internal LED
     pub fn turn_on(&mut self) {
         // 1 becomes true, turning on the LED
         unsafe {
@@ -14,6 +16,7 @@ impl InternalLED {
         self.is_on = true;
     }
 
+    /// This function turns off the internal LED
     pub fn turn_off(&mut self) {
         // 0 becomes false, turning off the LED
         unsafe {
@@ -22,6 +25,7 @@ impl InternalLED {
         self.is_on = false;
     }
 
+    /// This function returns if the LED is on
     #[must_use]
     pub fn is_on(&self) -> bool {
         self.is_on

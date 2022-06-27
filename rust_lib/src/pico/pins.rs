@@ -1,6 +1,7 @@
 use core::ffi::c_void;
 macro_rules! make_pin {
     ($name:ident, $num:literal) => {
+        /// This represents a pin
         pub struct $name {
             _secret: Option<*mut c_void>, // This is to ensure that it won't be Send or Sync
         }
@@ -17,7 +18,9 @@ macro_rules! make_pin {
     };
 }
 
+/// All pins have to implement this interface so that other functions would be able to easily get the gpio pin it represents
 pub trait Pin {
+    /// This function returns the gpio number of a given pin
     fn get_pin(&self) -> u8;
 }
 

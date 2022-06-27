@@ -6,6 +6,7 @@
 #include "hardware/i2c.h"
 #include "pico/binary_info.h"
 #include "lcd-2004/lcd_2004_i2c.h"
+#include "nec_receive_library/nec_receive.h"
 
 #include "bridge.h"
 
@@ -79,4 +80,55 @@ void c_lcd_clear(void* lcd) {
 void c_lcd_putch(void* lcd, uint8_t line, int pos, unsigned char ch) {
   lcd_set_cursor((struct lcd_device*)lcd,line,pos);
   lcd_char((struct lcd_device*)lcd, ch);
+}
+
+int c_register_ir(uint8_t pioDevice, uint8_t pin){
+  PIO pio;
+  if (pioDevice == 0) {
+    pio = pio0;
+  } else if (pioDevice == 1) {
+    pio = pio1;
+  } else {
+    return WRONG_PIO_DEVICE;
+  }
+  int sm = nec_rx_init(pio, pin);
+  if (sm == -1) {
+    return CANNOT_INIT_PIO;
+  }
+  return sm;
+}
+
+Frame c_read_ir(uint8_t pioDevice, uint8_t rx_sm) {
+  PIO pio;
+  if (pioDevice == 0) {
+    pio = pio0;
+  } else if (pioDevice == 1) {
+    pio = pio1;
+  } else {
+    // This was checked in a previous branch
+  }
+
+  
+
+  if(!pio_sm_is_rx_fifo_empty(pio, rx_sm)) {
+    uint32_t rx_frame = pio_sm_get(pio, rx_sm);
+    uint8_t p_address = 0;
+    uint8_t p_data = 0;
+    if (nec_decode_frame(rx_frame,&p_address, &p_data)) {
+      Frame returnVal = {
+        .p_address = p_address,
+        .p_data = p_data,
+        .error = 0,
+      };
+      return returnVal;
+    }
+    
+  } else {
+     Frame returnVal = {
+      .p_address = 0,
+      .p_data = 0,
+      .error = NO_FRAME_AVAILABLE,
+    };
+    return returnVal;
+  }
 }
