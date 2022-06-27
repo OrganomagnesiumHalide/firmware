@@ -8,7 +8,6 @@ fn main() {
     // to bindgen, and lets you build up options for
     // the resulting bindings.
     let bindings = bindgen::Builder::default()
-        .raw_line("#[allow(non_camel_case_types)]")
         .use_core()
         .ctypes_prefix("cty".to_string())
         .size_t_is_usize(true)

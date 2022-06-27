@@ -7,11 +7,18 @@
 #![cfg_attr(not(test), no_std)]
 #![warn(missing_docs)]
 
+use core::fmt::Write;
 use core::time::Duration;
+use heapless::String;
 
 use pico::{
     device::Pico,
-    perifs::{i2c::I2C, internal_led::InternalLED, lcd2004a::LCD2004a},
+    perifs::{
+        i2c::I2C,
+        internal_led::InternalLED,
+        ir::{PioInitError, IR},
+        lcd2004a::LCD2004a,
+    },
 };
 
 /// This module contains the libraries required to interact with the pico in a safe way.
@@ -24,8 +31,8 @@ pub mod pico;
 pub fn main() {
     let mut pico = unsafe { Pico::new() };
 
-    // This is only called once, so it shouldn't panic
-
+    // The following is only called once, so it shouldn't panic
+    let (pio0, _pio1) = pico.get_pio().unwrap();
     let (
         pin0,
         pin1,
@@ -41,7 +48,7 @@ pub fn main() {
         _pin11,
         pin12,
         pin13,
-        _pin14,
+        pin14,
         _pin15,
         pin16,
         pin17,
@@ -73,8 +80,35 @@ pub fn main() {
     };
     lcd_screen.display("This is a test\nline 2".as_bytes().iter().copied());
 
+    let mut pio = match IR::new(pio0, pin14) {
+        Ok(pio) => pio,
+        Err(err) => match err {
+            PioInitError::WrongPioDevice => loop {
+                lcd_screen.display("Wrong Pio Device".as_bytes().iter().copied());
+            },
+            PioInitError::CannotInitPio => loop {
+                lcd_screen.display("CannotInitPio".as_bytes().iter().copied());
+            },
+            PioInitError::SMTooLarge => loop {
+                lcd_screen.display("Assert Error, sm too large".as_bytes().iter().copied());
+            },
+        },
+    };
+
     // To show that it's doing something
     loop {
+        let read = pio.read();
+        read.map(|val| {
+            if val.data != 0 {
+                let mut s: String<50> = String::new();
+                if write!(s, "{:x} {:x}", val.address, val.data).is_err() {
+                    lcd_screen.display("Error writing values".as_bytes().iter().copied());
+                }
+
+                lcd_screen.display(s.as_bytes().iter().copied());
+            };
+            Some(())
+        });
         blink(&mut pico, &mut led);
     }
 }
@@ -82,9 +116,9 @@ pub fn main() {
 /// This function turns the internal LED on and off every two seconds
 pub fn blink(pico: &mut Pico, led: &mut InternalLED) {
     led.turn_on();
-    pico.sleep(Duration::from_secs(1));
+    pico.sleep(Duration::from_millis(1));
     led.turn_off();
-    pico.sleep(Duration::from_secs(1));
+    pico.sleep(Duration::from_millis(1));
 }
 
 /// This function runs whenever the program panics.

@@ -45,6 +45,7 @@ type Pins = (
 /// Since pins don't implement Copy or Clone, they can only be obtained from Pico, and this should be done exactly once.
 pub struct Pico {
     pins: Option<Pins>,
+    pio: Option<(Pio, Pio)>,
 }
 unsafe impl Send for Pico {}
 
@@ -85,6 +86,7 @@ impl Pico {
                 Pin27::new(),
                 Pin28::new(),
             )),
+            pio: Some((Pio { pio_num: 0 }, Pio { pio_num: 1 })),
         }
     }
 
@@ -94,6 +96,13 @@ impl Pico {
     /// to it as an argument.
     pub fn get_pins(&mut self) -> Option<Pins> {
         self.pins.take()
+    }
+
+    /// This function returns the pio devices from the pico
+    ///
+    /// This can only be called once, and each pio device can load only one program
+    pub fn get_pio(&mut self) -> Option<(Pio, Pio)> {
+        self.pio.take()
     }
 
     /// This function puts the device to sleep for a specified duration
@@ -108,5 +117,18 @@ impl Pico {
             let amnt_ms = ms.as_millis().try_into().unwrap_or(u32::MAX);
             rust_bridge::c_functions::c_device_sleep(amnt_ms);
         }
+    }
+}
+
+/// This represents one of the two available pio devices in the Raspberry Pi Pico
+pub struct Pio {
+    pio_num: u8,
+}
+
+impl Pio {
+    /// This returns the pio number of the device
+    #[must_use]
+    pub fn get_num(&self) -> u8 {
+        self.pio_num
     }
 }
