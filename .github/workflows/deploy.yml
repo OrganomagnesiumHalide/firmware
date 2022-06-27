@@ -44,3 +44,25 @@ jobs:
           asset_path: firmware.uf2
           asset_name: firmware.uf2
           asset_content_type: application/octet-stream
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
+          components: rustfmt, rust-src
+
+      - name: Build Documentation
+        uses: actions-rs/cargo@v1
+        with:
+          command: doc
+          args: --manifest-path rust_lib/Cargo.toml --all
+            
+      - name: Deploy Documentation
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          deploy_key: ${{ secrets.GITHUB_TOKEN }}
+          personal_token: ${{ secrets.token }}
+          publish_branch: gh-pages
+          publish_dir: ./rust_lib/target/doc
+          keep_files: true
